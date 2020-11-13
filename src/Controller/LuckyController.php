@@ -23,10 +23,8 @@ class LuckyController
     {
         $pizzas = $this->tinyPizzaRepository->findAll();
 
-        echo $pizzas[0]->getName();
-
         return new Response(
-            '<html><body>Pizzas: ' . json_encode($pizzas) . '</body></html>'
+            '<html><body>Pizzas: ' . $pizzas[0]->getName() . '</body></html>'
         );
     }
 
