@@ -1,4 +1,4 @@
-FROM php:7.4.6-fpm-alpine
+FROM php:8.0.0-fpm-alpine
 
 ARG UID
 ENV UID=${UID:-1000}
