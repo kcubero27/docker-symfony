@@ -28,7 +28,6 @@ build: ## Rebuilds all the containers
 prepare: ## Runs backend commands
 	mkdir -p var/cache/{dev,prod}
 
-# Backend commands
 composer-install: prepare run ## Installs composer dependencies
 	U_ID=${UID} COMPOSE_PROJECT_NAME=${PROJECT_NAME} \
 	docker-compose exec -u ${UID} php composer install \
@@ -37,7 +36,6 @@ composer-install: prepare run ## Installs composer dependencies
 php-logs: run ## Tails the Symfony dev log
 	U_ID=${UID} COMPOSE_PROJECT_NAME=${PROJECT_NAME} \
 	docker-compose exec -u ${UID} php tail -f var/log/dev.log
-# End backend commands
 
 ssh-php: run ## ssh's into the be container
 	U_ID=${UID} COMPOSE_PROJECT_NAME=${PROJECT_NAME} \
@@ -51,6 +49,14 @@ ssh-nginx: run ## ssh's into the web container
 	U_ID=${UID} COMPOSE_PROJECT_NAME=${PROJECT_NAME} \
 	docker-compose exec -u ${UID} nginx ash
 
-code-style: run ## Runs php-cs to fix code styling following Symfony rules
+test: ## Runs tests
 	U_ID=${UID} COMPOSE_PROJECT_NAME=${PROJECT_NAME} \
-	docker-compose exec -u ${UID} php php-cs-fixer fix src --rules=@Symfony
+	docker-compose exec -u ${UID} php composer test
+
+style: ## Runs phpcs to check code styling
+	U_ID=${UID} COMPOSE_PROJECT_NAME=${PROJECT_NAME} \
+	docker-compose exec -u ${UID} php composer style
+
+fix-style: ## Runs phpcbf to fix code styling
+	U_ID=${UID} COMPOSE_PROJECT_NAME=${PROJECT_NAME} \
+	docker-compose exec -u ${UID} php composer fix-style
